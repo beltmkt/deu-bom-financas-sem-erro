@@ -1,0 +1,5 @@
+{
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/deu-bom-app/dist/index.html" }
+  ]
+}
