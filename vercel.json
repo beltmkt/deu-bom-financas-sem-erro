@@ -1,5 +1,5 @@
 {
   "rewrites": [
-    { "source": "/((?!deu-bom-app).*)", "destination": "/deu-bom-app/dist/index.html" }
+    { "source": "/((?!assets|favicon|icons).*)", "destination": "/deu-bom-app/dist/index.html" }
   ]
 }
