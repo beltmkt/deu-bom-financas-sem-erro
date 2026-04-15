@@ -1,0 +1,221 @@
+/* AnalyticsPage Styles */
+
+.analytics-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: var(--color-bg, #0F172A);
+  color: var(--color-text-primary, #E2E8F0);
+}
+
+.analytics-page__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px var(--page-padding, 16px);
+  background: var(--color-surface, #1E293B);
+  border-bottom: 1px solid var(--color-border, #334155);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.analytics-page__header h1 {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.analytics-page__header-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--color-border, #334155);
+  background: transparent;
+  cursor: pointer;
+  font-size: 18px;
+  transition: all var(--transition-fast, 0.15s ease);
+}
+
+.analytics-page__header-btn:hover {
+  background: var(--color-primary-alpha, rgba(87, 94, 207, 0.1));
+  border-color: var(--color-primary, #575ECF);
+}
+
+.analytics-page__main {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-section-gap, 24px);
+  padding: var(--space-section-gap, 24px) var(--page-padding, 16px);
+  padding-bottom: 100px; /* Espaço para BottomNav */
+}
+
+.analytics-page__section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background: var(--color-surface, #1E293B);
+  border: 1px solid var(--color-border, #334155);
+  border-radius: 12px;
+  padding: var(--space-section-gap, 24px);
+}
+
+.analytics-page__section--actions {
+  gap: 12px;
+  padding: 20px var(--page-padding, 16px);
+  position: fixed;
+  bottom: 64px;
+  left: 0;
+  right: 0;
+  background: var(--color-surface, #1E293B);
+  border-top: 1px solid var(--color-border, #334155);
+  border-bottom: 1px solid var(--color-border, #334155);
+  z-index: 95;
+  display: flex;
+  gap: 12px;
+}
+
+.analytics-page__section-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+  color: var(--color-text-primary, #E2E8F0);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.analytics-page__chart-container {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.analytics-page__insights {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.analytics-page__cta {
+  padding: 12px 20px;
+  background: var(--color-primary, #575ECF);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all var(--transition-fast, 0.15s ease);
+  flex: 1;
+  white-space: nowrap;
+}
+
+.analytics-page__cta:hover {
+  background: var(--color-primary-dark, #4f52b8);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px var(--color-primary-alpha, rgba(87, 94, 207, 0.3));
+}
+
+.analytics-page__cta:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+.analytics-page__cta--secondary {
+  background: transparent;
+  color: var(--color-primary, #575ECF);
+  border: 1px solid var(--color-primary, #575ECF);
+  box-shadow: none;
+}
+
+.analytics-page__cta--secondary:hover {
+  background: var(--color-primary-alpha, rgba(87, 94, 207, 0.1));
+  border-color: var(--color-primary-dark, #4f52b8);
+  color: var(--color-primary-dark, #4f52b8);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────── */
+/* RESPONSIVE: Mobile (< 768px) */
+/* ─────────────────────────────────────────────────────────────────────────── */
+
+@media (max-width: 767px) {
+  .analytics-page__main {
+    gap: 16px;
+    padding: 12px 12px;
+    padding-bottom: 120px;
+  }
+
+  .analytics-page__section {
+    gap: 12px;
+    padding: 14px;
+    border-radius: 10px;
+  }
+
+  .analytics-page__section--actions {
+    flex-direction: column;
+    padding: 10px 12px;
+    gap: 8px;
+  }
+
+  .analytics-page__section-title {
+    font-size: 14px;
+  }
+
+  .analytics-page__cta {
+    padding: 10px 14px;
+    font-size: 13px;
+    width: 100%;
+  }
+}
+
+@media (max-width: 374px) {
+  .analytics-page__header {
+    padding: 12px 10px;
+  }
+
+  .analytics-page__header h1 {
+    font-size: 18px;
+  }
+
+  .analytics-page__header-btn {
+    width: 32px;
+    height: 32px;
+  }
+
+  .analytics-page__main {
+    gap: 12px;
+    padding: 10px 10px;
+  }
+
+  .analytics-page__section {
+    padding: 12px;
+    gap: 10px;
+  }
+
+  .analytics-page__section--actions {
+    padding: 8px 10px;
+  }
+
+  .analytics-page__cta {
+    padding: 9px 12px;
+    font-size: 12px;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────── */
+/* ACCESSIBILITY */
+/* ─────────────────────────────────────────────────────────────────────────── */
+
+.analytics-page__cta:focus-visible,
+.analytics-page__header-btn:focus-visible {
+  outline: 2px solid var(--color-primary, #575ECF);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .analytics-page__cta:hover {
+    transform: none;
+  }
+}

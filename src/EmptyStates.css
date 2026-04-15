@@ -1,0 +1,279 @@
+/* EmptyStates.css - Estados vazios informativos */
+
+:root {
+  --empty-state-spacing: 24px;
+  --empty-state-icon-size: 64px;
+  --empty-state-title-size: 18px;
+  --empty-state-description-size: 14px;
+}
+
+/* Estado vazio base */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: var(--empty-state-spacing);
+  min-height: 200px;
+  border-radius: 16px;
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+}
+
+.empty-state__icon {
+  font-size: var(--empty-state-icon-size);
+  margin-bottom: 16px;
+  opacity: 0.8;
+}
+
+.empty-state__content {
+  max-width: 320px;
+}
+
+.empty-state__title {
+  font-size: var(--empty-state-title-size);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin: 0 0 8px 0;
+}
+
+.empty-state__description {
+  font-size: var(--empty-state-description-size);
+  color: var(--color-text-secondary);
+  margin: 0 0 24px 0;
+  line-height: 1.5;
+}
+
+.empty-state__action {
+  margin-top: 8px;
+}
+
+/* Variantes de cor */
+.empty-state--primary {
+  background: linear-gradient(135deg, var(--color-primary-light), var(--color-primary));
+  color: white;
+  border: none;
+}
+
+.empty-state--primary .empty-state__title,
+.empty-state--primary .empty-state__description {
+  color: white;
+}
+
+.empty-state--secondary {
+  background: var(--color-bg-secondary);
+  border: 2px dashed var(--color-border);
+}
+
+.empty-state--info {
+  background: linear-gradient(135deg, var(--color-info-light), var(--color-info));
+  color: white;
+  border: none;
+}
+
+.empty-state--info .empty-state__title,
+.empty-state--info .empty-state__description {
+  color: white;
+}
+
+.empty-state--warning {
+  background: linear-gradient(135deg, var(--color-warning-light), var(--color-warning));
+  color: white;
+  border: none;
+}
+
+.empty-state--warning .empty-state__title,
+.empty-state--warning .empty-state__description {
+  color: white;
+}
+
+.empty-state--danger {
+  background: linear-gradient(135deg, var(--color-danger-light), var(--color-danger));
+  color: white;
+  border: none;
+}
+
+.empty-state--danger .empty-state__title,
+.empty-state--danger .empty-state__description {
+  color: white;
+}
+
+/* Botões para empty states */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: 44px; /* Acessibilidade touch */
+}
+
+.btn--primary {
+  background: var(--color-primary);
+  color: white;
+}
+
+.btn--primary:hover {
+  background: var(--color-primary-dark);
+  transform: translateY(-1px);
+}
+
+.btn--secondary {
+  background: var(--color-secondary);
+  color: var(--color-text-primary);
+}
+
+.btn--secondary:hover {
+  background: var(--color-secondary-dark);
+}
+
+.btn--outline {
+  background: transparent;
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border);
+}
+
+.btn--outline:hover {
+  background: var(--color-bg-hover);
+  border-color: var(--color-primary);
+}
+
+/* Estados menores */
+.empty-chart {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+  text-align: center;
+  color: var(--color-text-secondary);
+  background: var(--color-bg-secondary);
+  border-radius: 12px;
+  border: 1px solid var(--color-border);
+}
+
+.empty-chart__icon {
+  font-size: 32px;
+  margin-bottom: 8px;
+  opacity: 0.6;
+}
+
+.empty-chart__text {
+  font-size: 14px;
+  margin: 0;
+}
+
+.empty-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+  text-align: center;
+  color: var(--color-text-secondary);
+}
+
+.empty-list__icon {
+  font-size: 24px;
+  margin-bottom: 8px;
+  opacity: 0.6;
+}
+
+.empty-list__text {
+  font-size: 12px;
+  margin: 0;
+  font-weight: 500;
+}
+
+/* Animações sutis */
+.empty-state {
+  animation: empty-state-fade-in 0.3s ease-out;
+}
+
+@keyframes empty-state-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Hover effects */
+.empty-state--secondary:hover {
+  border-color: var(--color-primary);
+  border-style: solid;
+}
+
+/* Dark mode adjustments */
+@media (prefers-color-scheme: dark) {
+  .empty-state--primary {
+    background: linear-gradient(135deg, var(--color-primary-dark), var(--color-primary));
+  }
+
+  .empty-state--info {
+    background: linear-gradient(135deg, var(--color-info-dark), var(--color-info));
+  }
+
+  .empty-state--warning {
+    background: linear-gradient(135deg, var(--color-warning-dark), var(--color-warning));
+  }
+
+  .empty-state--danger {
+    background: linear-gradient(135deg, var(--color-danger-dark), var(--color-danger));
+  }
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  .empty-state {
+    padding: 20px;
+    min-height: 160px;
+  }
+
+  .empty-state__icon {
+    font-size: 48px;
+    margin-bottom: 12px;
+  }
+
+  .empty-state__content {
+    max-width: 280px;
+  }
+
+  .empty-state__title {
+    font-size: 16px;
+  }
+
+  .empty-state__description {
+    font-size: 13px;
+  }
+
+  .btn {
+    padding: 10px 20px;
+    font-size: 13px;
+    min-height: 40px;
+  }
+}
+
+/* Print styles */
+@media print {
+  .empty-state {
+    background: white !important;
+    border: 1px solid #ccc !important;
+    color: black !important;
+  }
+
+  .empty-state__title,
+  .empty-state__description {
+    color: black !important;
+  }
+}

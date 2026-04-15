@@ -1,0 +1,334 @@
+/**
+ * TransactionList.css
+ * Estilos para TransactionList reutilizável
+ */
+
+.transaction-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  background: transparent;
+  border-radius: var(--radius-md, 12px);
+  overflow: hidden;
+}
+
+/* ==================== ITEM INDIVIDUAL ==================== */
+
+.transaction-item {
+  display: grid;
+  grid-template-columns: auto 1fr auto auto;
+  gap: var(--space-md, 16px);
+  align-items: center;
+  padding: var(--space-md, 16px);
+  background: var(--card-bg, #1E293B);
+  border-bottom: 1px solid var(--card-border, #334155);
+  transition: background-color 0.2s ease;
+  cursor: default;
+}
+
+.transaction-item:last-child {
+  border-bottom: none;
+}
+
+.transaction-item:hover {
+  background: var(--card-hover-bg, #1e293b);
+}
+
+.transaction-item.selected {
+  background: var(--primary-light, rgba(87, 94, 207, 0.1));
+  border-left: 3px solid var(--color-primary, #575ECF);
+}
+
+/* Modo compacto */
+.transaction-item.compact {
+  padding: var(--space-sm, 8px) var(--space-md, 16px);
+  gap: 12px;
+}
+
+/* ==================== TIPOS DE TRANSAÇÃO ==================== */
+
+.transaction-item.transaction-expense {
+  --tx-color: #EF4444;
+}
+
+.transaction-item.transaction-income {
+  --tx-color: #10B981;
+}
+
+.transaction-item.transaction-transfer {
+  --tx-color: #6B7280;
+}
+
+/* ==================== CHECKBOX ==================== */
+
+.transaction-item .checkbox-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+}
+
+.transaction-item .checkbox-wrapper input {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+/* ==================== ÍCONE DE CATEGORIA ==================== */
+
+.transaction-item .category-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  min-width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: rgba(87, 94, 207, 0.1);
+  color: var(--tx-color);
+}
+
+.transaction-item.compact .category-icon {
+  font-size: 20px;
+  min-width: 28px;
+  height: 28px;
+}
+
+/* ==================== INFORMAÇÕES ==================== */
+
+.transaction-item .info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0; /* Para text-overflow funcionar */
+}
+
+.transaction-item .description {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary, #E2E8F0);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.transaction-item .category-label {
+  font-size: 12px;
+  color: var(--text-secondary, #CBD5E1);
+}
+
+.transaction-item .date {
+  font-size: 11px;
+  color: var(--text-tertiary, #94A3B8);
+}
+
+.transaction-item.compact .description {
+  font-size: 13px;
+}
+
+.transaction-item.compact .category-label,
+.transaction-item.compact .date {
+  display: none;
+}
+
+/* ==================== VALOR ==================== */
+
+.transaction-item .amount {
+  font-size: 15px;
+  font-weight: 600;
+  white-space: nowrap;
+  min-width: 80px;
+  text-align: right;
+}
+
+.transaction-item .amount-expense {
+  color: #EF4444;
+}
+
+.transaction-item .amount-income {
+  color: #10B981;
+}
+
+.transaction-item .amount-transfer {
+  color: #6B7280;
+}
+
+.transaction-item.compact .amount {
+  font-size: 13px;
+  min-width: 60px;
+}
+
+/* ==================== AÇÕES (EDIT/DELETE) ==================== */
+
+.transaction-item .actions {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.transaction-item:hover .actions {
+  opacity: 1;
+}
+
+.transaction-item .action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-secondary, #CBD5E1);
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0;
+}
+
+.transaction-item .action-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: var(--text-primary, #E2E8F0);
+}
+
+.transaction-item .action-btn.edit:hover {
+  background: rgba(87, 94, 207, 0.3);
+  color: #575ECF;
+}
+
+.transaction-item .action-btn.delete:hover {
+  background: rgba(239, 68, 68, 0.3);
+  color: #EF4444;
+}
+
+/* ==================== ESTADO VAZIO ==================== */
+
+.transaction-list.empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  padding: var(--space-lg, 24px);
+}
+
+.transaction-list .empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-md, 16px);
+  text-align: center;
+}
+
+.transaction-list .empty-icon {
+  font-size: 48px;
+  opacity: 0.4;
+}
+
+.transaction-list .empty-text {
+  font-size: 14px;
+  color: var(--text-secondary, #CBD5E1);
+}
+
+/* ==================== CARREGAMENTO ==================== */
+
+.transaction-list .loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-md, 16px);
+  min-height: 150px;
+  color: var(--text-secondary, #CBD5E1);
+}
+
+.transaction-list .spinner {
+  display: inline-flex;
+  font-size: 24px;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ==================== AGRUPAMENTO ==================== */
+
+.transaction-list .grouped-transactions {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.transaction-list .transaction-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.transaction-list .group-header {
+  padding: var(--space-md, 16px) var(--space-md, 16px) var(--space-sm, 8px);
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--text-tertiary, #94A3B8);
+  letter-spacing: 0.5px;
+  background: rgba(255, 255, 255, 0.02);
+  border-bottom: 1px solid var(--card-border, #334155);
+}
+
+.transaction-list .group-items {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* ==================== FOOTER DE SELEÇÃO ==================== */
+
+.transaction-list .selection-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-md, 16px);
+  background: rgba(87, 94, 207, 0.1);
+  border-top: 1px solid var(--color-primary, #575ECF);
+  font-size: 12px;
+  color: var(--color-primary, #575ECF);
+  font-weight: 600;
+}
+
+/* ==================== RESPONSIVO ==================== */
+
+@media (max-width: 375px) {
+  .transaction-item {
+    grid-template-columns: auto 1fr auto;
+    gap: var(--space-sm, 8px);
+  }
+
+  .transaction-item .actions {
+    display: none;
+  }
+
+  .transaction-item {
+    padding: var(--space-sm, 8px) var(--space-sm, 8px);
+  }
+}
+
+/* Modo redução de movimento */
+@media (prefers-reduced-motion: reduce) {
+  .transaction-item,
+  .transaction-item .action-btn,
+  .transaction-list .spinner {
+    animation: none;
+    transition: none;
+  }
+}

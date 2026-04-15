@@ -1,0 +1,109 @@
+/* InsightCard Styles */
+
+.insight-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px;
+  background: var(--color-surface, #1E293B);
+  border: 1px solid var(--color-border, #334155);
+  border-radius: 8px;
+  border-left: 3px solid var(--color-primary, #575ECF);
+  transition: all var(--transition-fast, 0.15s ease);
+}
+
+.insight-card:hover {
+  background: var(--color-primary-alpha, rgba(87, 94, 207, 0.05));
+  border-left-color: var(--color-primary-dark, #4f52b8);
+}
+
+/* Variações por tipo */
+.insight-card--info {
+  border-left-color: var(--color-primary, #575ECF);
+}
+
+.insight-card--info:hover {
+  border-left-color: var(--color-primary-dark, #4f52b8);
+  background: var(--color-primary-alpha, rgba(87, 94, 207, 0.05));
+}
+
+.insight-card--warning {
+  border-left-color: var(--color-warning, #F59E0B);
+}
+
+.insight-card--warning:hover {
+  background: var(--color-warning-alpha, rgba(245, 158, 11, 0.05));
+}
+
+.insight-card--success {
+  border-left-color: var(--color-success, #10B981);
+}
+
+.insight-card--success:hover {
+  background: var(--color-success-alpha, rgba(16, 185, 129, 0.05));
+}
+
+.insight-card--tip {
+  border-left-color: var(--color-secondary, #8B5CF6);
+}
+
+.insight-card--tip:hover {
+  background: var(--color-secondary-alpha, rgba(139, 92, 246, 0.05));
+}
+
+.insight-card__content {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  flex: 1;
+}
+
+.insight-card__icon {
+  font-size: 18px;
+  line-height: 1;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+}
+
+.insight-card__text {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--color-text-primary, #E2E8F0);
+}
+
+.insight-card__action {
+  padding: 6px 10px;
+  background: var(--color-primary-alpha, rgba(87, 94, 207, 0.15));
+  color: var(--color-primary, #575ECF);
+  border: 1px solid var(--color-primary-alpha, rgba(87, 94, 207, 0.3));
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: all var(--transition-fast, 0.15s ease);
+  flex-shrink: 0;
+}
+
+.insight-card__action:hover {
+  background: var(--color-primary-alpha, rgba(87, 94, 207, 0.25));
+  border-color: var(--color-primary, #575ECF);
+}
+
+@media (max-width: 375px) {
+  .insight-card {
+    padding: 12px;
+    gap: 10px;
+    flex-direction: column;
+  }
+
+  .insight-card__action {
+    width: 100%;
+    text-align: center;
+  }
+}
