@@ -1,5 +1,5 @@
 {
   "rewrites": [
-    { "source": "/(.*)", "destination": "/deu-bom-app/dist/index.html" }
+    { "source": "/((?!deu-bom-app).*)", "destination": "/deu-bom-app/dist/index.html" }
   ]
 }
