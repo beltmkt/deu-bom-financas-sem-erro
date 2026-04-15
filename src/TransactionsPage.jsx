@@ -10,10 +10,13 @@ export function TransactionsPage({
   categories = ['Comida', 'Transporte', 'Saude', 'Educacao', 'Lazer', 'Contas', 'Salario'],
   onNavigate = () => {},
   onDeleteTransactions = () => {},
+  onCategorizeTransactions = () => {},
   onExportTransactions = () => {},
 }) {
   const [filter, setFilter] = useState({ period: 'Ultimos 30d', categories: [], search: '' });
   const [selectedIds, setSelectedIds] = useState([]);
+  const [showCategoryModal, setShowCategoryModal] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState(categories[0] || 'Comida');
 
   const filteredTransactions = useMemo(() => {
     return transactions.filter((transaction) => {
@@ -42,7 +45,14 @@ export function TransactionsPage({
   };
 
   const handleCategorizeSelected = () => {
-    console.log('Categorizar transacoes:', selectedIds);
+    setSelectedCategory(categories[0] || 'Comida');
+    setShowCategoryModal(true);
+  };
+
+  const handleApplyCategory = () => {
+    onCategorizeTransactions(selectedIds, selectedCategory);
+    setSelectedIds([]);
+    setShowCategoryModal(false);
   };
 
   const handleExport = () => {
@@ -108,6 +118,55 @@ export function TransactionsPage({
           Exportar
         </button>
       </section>
+
+      {showCategoryModal && (
+        <div
+          className="transactions-page__modal-overlay"
+          onClick={() => setShowCategoryModal(false)}
+        >
+          <div
+            className="transactions-page__modal"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <h2>Categorizar transacoes</h2>
+            <p>
+              Aplicar a categoria abaixo para {selectedIds.length}{' '}
+              {selectedIds.length === 1 ? 'transacao selecionada' : 'transacoes selecionadas'}.
+            </p>
+
+            <label className="transactions-page__modal-field">
+              <span>Categoria</span>
+              <select
+                value={selectedCategory}
+                onChange={(event) => setSelectedCategory(event.target.value)}
+              >
+                {categories.map((category) => (
+                  <option key={category} value={category}>
+                    {category}
+                  </option>
+                ))}
+              </select>
+            </label>
+
+            <div className="transactions-page__modal-actions">
+              <button
+                type="button"
+                className="transactions-page__modal-btn transactions-page__modal-btn--secondary"
+                onClick={() => setShowCategoryModal(false)}
+              >
+                Cancelar
+              </button>
+              <button
+                type="button"
+                className="transactions-page__modal-btn"
+                onClick={handleApplyCategory}
+              >
+                Aplicar categoria
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <BottomNav active="transactions" onNavigate={onNavigate} />
     </div>

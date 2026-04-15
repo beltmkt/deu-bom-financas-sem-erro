@@ -78,3 +78,18 @@
     - `https://github.com/beltmkt/deu-bom-financas-sem-erro/pull/new/codex/publicar-repositorio-e-fluxos-reais`
 - Observacao:
   - o `gh` segue com token invalido, mas o push via `git` funcionou com sucesso.
+
+### Checkpoint 07 - Categorizacao em massa
+- Status: concluido
+- Etapas realizadas:
+  - adicionado handler real de categorizacao em massa no estado central do `App`;
+  - criado modal de escolha de categoria em `TransactionsPage`;
+  - aplicado update real de categoria e icone nas transacoes selecionadas.
+- Validacao esperada:
+  - selecionar itens;
+  - abrir acao `Categorizar`;
+  - escolher categoria;
+  - confirmar aplicacao e ver a lista atualizada.
+- Proxima prioridade recomendada:
+  - revisar os icones/textos temporarios da interface;
+  - decidir entre persistencia local e backend como proxima entrega estrutural.

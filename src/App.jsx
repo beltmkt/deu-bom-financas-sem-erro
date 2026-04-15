@@ -115,6 +115,24 @@ function App() {
     setTransactions((current) => current.filter((transaction) => !ids.includes(transaction.id)));
   };
 
+  const handleCategorizeTransactions = (ids, category) => {
+    setTransactions((current) =>
+      sortTransactions(
+        current.map((transaction) => {
+          if (!ids.includes(transaction.id)) {
+            return transaction;
+          }
+
+          return {
+            ...transaction,
+            category,
+            categoryIcon: getCategoryIcon(category),
+          };
+        })
+      )
+    );
+  };
+
   const handleExportTransactions = (items) => {
     const rows = [
       ['data', 'descricao', 'tipo', 'categoria', 'valor'],
@@ -150,6 +168,7 @@ function App() {
           categories={categories}
           onNavigate={setPage}
           onDeleteTransactions={handleDeleteTransactions}
+          onCategorizeTransactions={handleCategorizeTransactions}
           onExportTransactions={handleExportTransactions}
         />
       </div>
