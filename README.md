@@ -1,4 +1,4 @@
-# 🚀 DEU BOM!! - Fintech PWA
+# 🚀 DEU BOM!! - Finanças Sem Erro
 
 > **Uma PWA moderna para controle financeiro pessoal**
 > **React + Vite | Lighthouse 95+ | WCAG AA | Production-Ready**
