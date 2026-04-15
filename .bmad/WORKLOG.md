@@ -64,3 +64,17 @@
   - reautenticar no GitHub CLI;
   - criar branch de publicacao;
   - commitar e enviar para o remoto.
+
+### Checkpoint 06 - Publicacao do branch no GitHub
+- Status: concluido
+- Etapas realizadas:
+  - criada branch `codex/publicar-repositorio-e-fluxos-reais`;
+  - criado commit `1d0410f` com as entregas desta rodada;
+  - publicado o branch no remoto `origin`.
+- Resultado:
+  - branch remoto disponivel em:
+    - `origin/codex/publicar-repositorio-e-fluxos-reais`
+  - link sugerido pelo GitHub para PR:
+    - `https://github.com/beltmkt/deu-bom-financas-sem-erro/pull/new/codex/publicar-repositorio-e-fluxos-reais`
+- Observacao:
+  - o `gh` segue com token invalido, mas o push via `git` funcionou com sucesso.
