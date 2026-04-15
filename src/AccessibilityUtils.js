@@ -1,3 +1,5 @@
+import { useMemo } from 'react';
+
 /**
  * AccessibilityUtils.js - Utilitários de acessibilidade
  *
@@ -213,8 +215,8 @@ export const debounceAnnounce = (func, wait = 300) => {
  * Hook para anúncios debounced
  */
 export const useScreenReaderAnnouncer = () => {
-  const announce = React.useCallback(
-    debounceAnnounce(announceToScreenReader, 300),
+  const announce = useMemo(
+    () => debounceAnnounce(announceToScreenReader, 300),
     []
   );
 

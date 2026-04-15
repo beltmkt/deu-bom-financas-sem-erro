@@ -1,45 +1,6 @@
-/**
- * TransactionList Component
- * 
- * Componente reutilizável para exibir lista de transações em diferentes contextos
- * 
- * USO CASOS:
- * - Home: Últimas 3 transações (compact, no actions)
- * - Dashboard: Todas as transações com seleção (full, editable)
- * - Analytics: Agrupadas por data (grouped, view-only)
- * - Mobile: Swipe to edit/delete (touch-friendly)
- * 
- * @component
- * @example
- * // Home - Preview
- * <TransactionList 
- *   transactions={transactions}
- *   limit={3}
- *   compact={true}
- * />
- * 
- * // Dashboard - Full com seleção
- * <TransactionList 
- *   transactions={transactions}
- *   selectable={true}
- *   onDelete={handleDelete}
- *   onEdit={handleEdit}
- * />
- * 
- * // Analytics - Agrupado
- * <TransactionList 
- *   transactions={transactions}
- *   grouped={true}
- *   groupBy="date"
- * />
- */
-
-import React, { useState, useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import './TransactionList.css';
 
-/**
- * TransactionItem - Item individual (reutilizável internamente)
- */
 function TransactionItem({
   transaction,
   selectable = false,
@@ -48,49 +9,37 @@ function TransactionItem({
   editable = false,
   onEdit = null,
   onDelete = null,
-  compact = false
+  compact = false,
 }) {
-  const {
-    id,
-    date,
-    description,
-    categoryIcon,
-    category,
-    amount,
-    type // 'expense' | 'income'
-  } = transaction;
+  const { id, date, description, categoryIcon, category, amount, type } = transaction;
 
   const formatCurrency = (value) => {
     return new Intl.NumberFormat('pt-BR', {
       style: 'currency',
-      currency: 'BRL'
+      currency: 'BRL',
     }).format(value);
   };
 
   const formatDate = (dateStr) => {
-    const date = new Date(dateStr);
-    return date.toLocaleString('pt-BR', {
+    const parsed = new Date(dateStr);
+    return parsed.toLocaleString('pt-BR', {
       month: 'short',
       day: 'numeric',
       hour: '2-digit',
-      minute: '2-digit'
+      minute: '2-digit',
     });
   };
 
   return (
     <div
-      className={`transaction-item transaction-${type} ${
-        isSelected ? 'selected' : ''
-      } ${compact ? 'compact' : ''}`}
+      className={`transaction-item transaction-${type} ${isSelected ? 'selected' : ''} ${
+        compact ? 'compact' : ''
+      }`}
       role="row"
       data-testid={`transaction-${id}`}
     >
-      {/* Checkbox para seleção */}
       {selectable && (
-        <div
-          className="checkbox-wrapper"
-          onClick={() => onSelect && onSelect(id)}
-        >
+        <div className="checkbox-wrapper" onClick={() => onSelect && onSelect(id)}>
           <input
             type="checkbox"
             checked={isSelected}
@@ -100,22 +49,18 @@ function TransactionItem({
         </div>
       )}
 
-      {/* Ícone de categoria */}
       <div className="category-icon">{categoryIcon}</div>
 
-      {/* Informações principais */}
       <div className="info">
         <div className="description">{description}</div>
         {!compact && <div className="category-label">{category}</div>}
         {!compact && <div className="date">{formatDate(date)}</div>}
       </div>
 
-      {/* Valor */}
       <div className={`amount amount-${type}`}>
         {type === 'income' ? '+' : '-'} {formatCurrency(Math.abs(amount))}
       </div>
 
-      {/* Ações (edit, delete) */}
       {editable && (
         <div className="actions">
           {onEdit && (
@@ -125,7 +70,7 @@ function TransactionItem({
               title="Editar"
               aria-label={`Editar ${description}`}
             >
-              ✎
+              Editar
             </button>
           )}
           {onDelete && (
@@ -135,7 +80,7 @@ function TransactionItem({
               title="Deletar"
               aria-label={`Deletar ${description}`}
             >
-              ✕
+              Deletar
             </button>
           )}
         </div>
@@ -144,31 +89,27 @@ function TransactionItem({
   );
 }
 
-/**
- * TransactionList - Lista completa
- */
 export function TransactionList({
   transactions = [],
-  limit = null, // null = mostrar tudo
-  compact = false, // true = espaçamento menor
-  selectable = false, // true = checkboxes
-  editable = false, // true = botões edit/delete
-  grouped = false, // true = agrupar por data
-  groupBy = 'date', // 'date' | 'category' | 'type'
+  limit = null,
+  compact = false,
+  selectable = false,
+  editable = false,
+  grouped = false,
+  groupBy = 'date',
   onDelete = null,
   onEdit = null,
   onSelectionChange = null,
   loading = false,
-  emptyText = 'Nenhuma transação especificada',
-  className = ''
+  emptyText = 'Nenhuma transacao especificada',
+  className = '',
 }) {
-  // Estado de seleção
   const [selectedIds, setSelectedIds] = useState(new Set());
 
-  // Lidar com seleção de item
   const handleSelect = useCallback(
     (id, multi = false) => {
       const newSelected = new Set(selectedIds);
+
       if (multi) {
         if (newSelected.has(id)) {
           newSelected.delete(id);
@@ -178,72 +119,70 @@ export function TransactionList({
       } else {
         newSelected.has(id) ? newSelected.delete(id) : newSelected.add(id);
       }
+
       setSelectedIds(newSelected);
       onSelectionChange && onSelectionChange(Array.from(newSelected));
     },
     [selectedIds, onSelectionChange]
   );
 
-  // Filtrar pelo limite
   let items = transactions;
   if (limit && limit > 0) {
     items = items.slice(0, limit);
   }
 
-  // Agrupar se necessário
   let groupedItems = null;
   if (grouped) {
-    groupedItems = items.reduce((acc, tx) => {
+    groupedItems = items.reduce((acc, transaction) => {
       let key;
+
       if (groupBy === 'date') {
-        key = new Date(tx.date).toLocaleDateString('pt-BR');
+        key = new Date(transaction.date).toLocaleDateString('pt-BR');
       } else if (groupBy === 'category') {
-        key = tx.category;
+        key = transaction.category;
       } else if (groupBy === 'type') {
-        key = tx.type === 'income' ? 'Receitas' : 'Gastos';
+        key = transaction.type === 'income' ? 'Receitas' : 'Gastos';
       }
 
       if (!acc[key]) {
         acc[key] = [];
       }
-      acc[key].push(tx);
+
+      acc[key].push(transaction);
       return acc;
     }, {});
   }
 
-  // Estado vazio
   if (!loading && items.length === 0) {
     return (
       <div className={`transaction-list empty ${className}`}>
         <div className="empty-state">
-          <div className="empty-icon">📭</div>
+          <div className="empty-icon">Lista</div>
           <div className="empty-text">{emptyText}</div>
         </div>
       </div>
     );
   }
 
-  // Renderizar lista
   return (
     <div className={`transaction-list ${className}`}>
       {loading ? (
-        <div className="loading" aria-label="Carregando transações">
-          <div className="spinner">⟳</div>
+        <div className="loading" aria-label="Carregando transacoes">
+          <div className="spinner">Carregando</div>
           <span>Carregando...</span>
         </div>
       ) : grouped ? (
-        // Renderizar agrupado
         <div className="grouped-transactions">
-          {Object.entries(groupedItems || {}).map(([groupKey, groupTxs]) => (
+          {Object.entries(groupedItems || {}).map(([groupKey, groupTransactions]) => (
             <div key={groupKey} className="transaction-group">
               <div className="group-header">{groupKey}</div>
               <div className="group-items">
-                {groupTxs.map((tx) => (
+                {groupTransactions.map((transaction) => (
                   <TransactionItem
-                    key={tx.id}
-                    transaction={tx}
+                    key={transaction.id}
+                    transaction={transaction}
                     selectable={selectable}
-                    isSelected={selectedIds.has(tx.id)}
+                    isSelected={selectedIds.has(transaction.id)}
                     onSelect={selectable ? handleSelect : null}
                     editable={editable}
                     onEdit={onEdit}
@@ -256,14 +195,13 @@ export function TransactionList({
           ))}
         </div>
       ) : (
-        // Renderizar lista simples
         <div className="simple-list">
-          {items.map((tx) => (
+          {items.map((transaction) => (
             <TransactionItem
-              key={tx.id}
-              transaction={tx}
+              key={transaction.id}
+              transaction={transaction}
               selectable={selectable}
-              isSelected={selectedIds.has(tx.id)}
+              isSelected={selectedIds.has(transaction.id)}
               onSelect={selectable ? handleSelect : null}
               editable={editable}
               onEdit={onEdit}
@@ -274,7 +212,6 @@ export function TransactionList({
         </div>
       )}
 
-      {/* Footer com info de seleção */}
       {selectable && selectedIds.size > 0 && (
         <div className="selection-footer">
           <span>{selectedIds.size} selecionado(s)</span>

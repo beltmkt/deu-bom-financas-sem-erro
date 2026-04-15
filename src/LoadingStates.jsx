@@ -1,19 +1,11 @@
 import React from 'react';
 import './LoadingStates.css';
 
-/**
- * LoadingStates - Estados de carregamento contextuais
- *
- * Fornece spinners e skeletons específicos para cada contexto da aplicação,
- * melhorando a percepção de performance do usuário.
- */
-
-// Componente base para spinner
 const Spinner = ({ size = 'medium', color = 'primary' }) => (
   <div
     className={`loading-spinner loading-spinner--${size} loading-spinner--${color}`}
     role="status"
-    aria-label="Carregando..."
+    aria-label="Carregando"
   >
     <div className="loading-spinner__dot" />
     <div className="loading-spinner__dot" />
@@ -21,7 +13,6 @@ const Spinner = ({ size = 'medium', color = 'primary' }) => (
   </div>
 );
 
-// Skeleton para BalanceCard
 const BalanceCardSkeleton = () => (
   <div className="balance-card-skeleton">
     <div className="balance-card-skeleton__header">
@@ -38,11 +29,10 @@ const BalanceCardSkeleton = () => (
   </div>
 );
 
-// Skeleton para TransactionList
 const TransactionListSkeleton = ({ count = 3 }) => (
   <div className="transaction-list-skeleton">
-    {Array.from({ length: count }, (_, i) => (
-      <div key={i} className="transaction-item-skeleton">
+    {Array.from({ length: count }, (_, index) => (
+      <div key={index} className="transaction-item-skeleton">
         <div className="transaction-item-skeleton__icon">
           <div className="skeleton skeleton--circle" />
         </div>
@@ -58,7 +48,6 @@ const TransactionListSkeleton = ({ count = 3 }) => (
   </div>
 );
 
-// Skeleton para gráficos
 const ChartSkeleton = ({ type = 'pie' }) => (
   <div className={`chart-skeleton chart-skeleton--${type}`}>
     <div className="chart-skeleton__canvas">
@@ -72,17 +61,12 @@ const ChartSkeleton = ({ type = 'pie' }) => (
   </div>
 );
 
-// Estados de carregamento específicos por contexto
-export const LoadingStates = {
-  // Spinner genérico
+const LoadingStates = {
   Spinner,
-
-  // Estados específicos da aplicação
   BalanceCard: BalanceCardSkeleton,
   TransactionList: TransactionListSkeleton,
   AnalyticsChart: ChartSkeleton,
 
-  // Estados de página
   HomePage: () => (
     <div className="page-loading page-loading--home">
       <BalanceCardSkeleton />
@@ -120,7 +104,6 @@ export const LoadingStates = {
     </div>
   ),
 
-  // Estados de ação
   Saving: () => (
     <div className="action-loading">
       <Spinner size="small" />
@@ -140,7 +123,7 @@ export const LoadingStates = {
       <Spinner size="small" />
       <span>Exportando...</span>
     </div>
-  )
+  ),
 };
 
 export default LoadingStates;

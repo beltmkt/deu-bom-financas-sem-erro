@@ -1,36 +1,31 @@
-import React, { useState, useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { FilterBar } from '@/components/common/FilterBar';
 import { CategoryChart } from '@/components/analytics/CategoryChart';
 import { TrendChart } from '@/components/analytics/TrendChart';
 import { InsightCard } from '@/components/analytics/InsightCard';
 import { BottomNav } from '@/components/common/BottomNav';
+import EmptyStates from '@/EmptyStates';
 import './AnalyticsPage.css';
 
-/**
- * AnalyticsPage - Página ANALYTICS (NOVA)
- * 
- * Mostra:
- * - Gráfico de despesas por categoria (pizza)
- * - Tendência de 3 meses (linha)
- * - Insights gerados por IA
- * - Análises visuais
- */
-
-export function AnalyticsPage({ 
+export function AnalyticsPage({
   transactions = [],
-  categories = ['Comida', 'Transporte', 'Saúde', 'Educação', 'Lazer', 'Contas'],
+  categories = ['Comida', 'Transporte', 'Saude', 'Educacao', 'Lazer', 'Contas'],
   onNavigate = () => {},
 }) {
-  const [filter, setFilter] = useState({ period: 'Este mês', categories: [], search: '' });
+  const [filter, setFilter] = useState({ period: 'Este mes', categories: [], search: '' });
 
-  // Dados agregados por categoria
+  const filteredTransactions = useMemo(
+    () => filterTransactions(transactions, filter),
+    [transactions, filter]
+  );
+
   const categoryData = useMemo(() => {
     const aggregated = {};
-    
-    transactions.forEach(tx => {
-      if (tx.amount < 0) { // Apenas gastos
-        const cat = tx.category || 'Outros';
-        aggregated[cat] = (aggregated[cat] || 0) + Math.abs(tx.amount);
+
+    filteredTransactions.forEach((transaction) => {
+      if (transaction.amount < 0) {
+        const category = transaction.category || 'Outros';
+        aggregated[category] = (aggregated[category] || 0) + Math.abs(transaction.amount);
       }
     });
 
@@ -38,67 +33,60 @@ export function AnalyticsPage({
       .map(([name, amount]) => ({
         category: name,
         amount,
-        percentage: 0, // Será calculado no componente
+        percentage: 0,
         color: getColorForCategory(name),
       }))
       .sort((a, b) => b.amount - a.amount);
-  }, [transactions]);
+  }, [filteredTransactions]);
 
-  // Dados de tendência (3 meses)
-  const trendData = useMemo(() => {
-    // Simular dados de 3 meses
-    return [
-      { month: 'Janeiro', gastos: 1500, receita: 3000 },
-      { month: 'Fevereiro', gastos: 1750, receita: 3200 },
-      { month: 'Março', gastos: 2100, receita: 3500 },
-    ];
-  }, [transactions]);
+  const trendData = useMemo(() => buildTrendData(filteredTransactions), [filteredTransactions]);
 
-  // Gerar insights
-  const insights = generateInsights(transactions, categoryData, trendData);
+  const insights = useMemo(
+    () => generateInsights(categoryData, trendData),
+    [categoryData, trendData]
+  );
 
   const handleExport = () => {
-    console.log('Exportar análise...');
-    // TODO: Exportar PDF ou Excel
+    console.log('Exportar analise...', filter);
   };
 
   return (
     <div className="analytics-page">
       <header className="analytics-page__header">
-        <h1>Análise</h1>
-        <button 
-          className="analytics-page__header-btn"
-          aria-label="Mais opções"
-        >
-          ⋯
+        <h1>Analise</h1>
+        <button className="analytics-page__header-btn" aria-label="Mais opcoes">
+          ...
         </button>
       </header>
 
-      {/* Filtros */}
       <FilterBar
-        periods={['Esta semana', 'Este mês', 'Este ano', 'Custom']}
+        periods={['Esta semana', 'Este mes', 'Este ano', 'Custom']}
         categories={categories}
         onFilter={setFilter}
-        initialPeriod="Este mês"
+        initialPeriod="Este mes"
         showSearch={false}
       />
 
       <main className="analytics-page__main">
-        {/* SEÇÃO 1: Gráfico de Categorias */}
+        {filteredTransactions.length === 0 && (
+          <section className="analytics-page__section">
+            <EmptyStates.NoAnalytics onAddTransaction={() => onNavigate('transactions')} />
+          </section>
+        )}
+
         <section className="analytics-page__section">
           <h2 className="analytics-page__section-title">Gastos por Categoria</h2>
           <div className="analytics-page__chart-container">
             <CategoryChart
               data={categoryData}
               type="pie"
-              emptyMessage="Sem dados neste período"
+              emptyMessage="Sem dados neste periodo"
             />
           </div>
         </section>
 
-        {/* SEÇÃO 2: Gráfico de Tendência */}
         <section className="analytics-page__section">
-          <h2 className="analytics-page__section-title">Tendência 3 Meses</h2>
+          <h2 className="analytics-page__section-title">Tendencia 3 Meses</h2>
           <div className="analytics-page__chart-container">
             <TrendChart
               data={trendData}
@@ -108,14 +96,13 @@ export function AnalyticsPage({
           </div>
         </section>
 
-        {/* SEÇÃO 3: Insights */}
-        {insights.length > 0 && (
+        {filteredTransactions.length > 0 && insights.length > 0 && (
           <section className="analytics-page__section">
-            <h2 className="analytics-page__section-title">💡 Insights</h2>
+            <h2 className="analytics-page__section-title">Insights</h2>
             <div className="analytics-page__insights">
-              {insights.map((insight, idx) => (
+              {insights.map((insight) => (
                 <InsightCard
-                  key={idx}
+                  key={insight.text}
                   icon={insight.icon}
                   text={insight.text}
                   type={insight.type}
@@ -126,19 +113,15 @@ export function AnalyticsPage({
           </section>
         )}
 
-        {/* SEÇÃO 4: CTAs */}
         <section className="analytics-page__section analytics-page__section--actions">
-          <button 
-            className="analytics-page__cta"
-            onClick={handleExport}
-          >
-            💾 Exportar Análise
+          <button className="analytics-page__cta" onClick={handleExport}>
+            Exportar Analise
           </button>
-          <button 
+          <button
             className="analytics-page__cta analytics-page__cta--secondary"
             onClick={() => onNavigate('transactions')}
           >
-            📋 Ver Transações
+            Ver Transacoes
           </button>
         </section>
       </main>
@@ -148,68 +131,161 @@ export function AnalyticsPage({
   );
 }
 
-/* ─────────────────────────────────────────────────────────────────────────── */
-/* HELPERS */
-/* ─────────────────────────────────────────────────────────────────────────── */
+function filterTransactions(transactions, filter) {
+  const referenceDate = getReferenceDate(transactions);
+
+  return transactions.filter((transaction) => {
+    if (
+      filter.categories.length > 0 &&
+      !filter.categories.includes(transaction.category)
+    ) {
+      return false;
+    }
+
+    if (!isTransactionInsidePeriod(transaction.date, filter.period, referenceDate)) {
+      return false;
+    }
+
+    return true;
+  });
+}
+
+function getReferenceDate(transactions) {
+  const timestamps = transactions
+    .map((transaction) => new Date(transaction.date).getTime())
+    .filter((timestamp) => Number.isFinite(timestamp));
+
+  return timestamps.length > 0 ? new Date(Math.max(...timestamps)) : new Date();
+}
+
+function isTransactionInsidePeriod(date, period, referenceDate) {
+  const current = new Date(date);
+
+  if (!Number.isFinite(current.getTime())) {
+    return false;
+  }
+
+  if (period === 'Este ano') {
+    return current.getFullYear() === referenceDate.getFullYear();
+  }
+
+  if (period === 'Esta semana') {
+    const diffInDays = Math.floor(
+      (referenceDate.getTime() - current.getTime()) / (1000 * 60 * 60 * 24)
+    );
+    return diffInDays >= 0 && diffInDays < 7;
+  }
+
+  if (period === 'Este mes') {
+    return (
+      current.getMonth() === referenceDate.getMonth() &&
+      current.getFullYear() === referenceDate.getFullYear()
+    );
+  }
+
+  return true;
+}
+
+function buildTrendData(transactions) {
+  const monthlyTotals = transactions.reduce((acc, transaction) => {
+    const current = new Date(transaction.date);
+
+    if (!Number.isFinite(current.getTime())) {
+      return acc;
+    }
+
+    const key = `${current.getFullYear()}-${String(current.getMonth() + 1).padStart(2, '0')}`;
+
+    if (!acc[key]) {
+      acc[key] = {
+        month: getMonthLabel(current),
+        gastos: 0,
+        receita: 0,
+        sortKey: key,
+      };
+    }
+
+    if (transaction.amount < 0) {
+      acc[key].gastos += Math.abs(transaction.amount);
+    } else {
+      acc[key].receita += transaction.amount;
+    }
+
+    return acc;
+  }, {});
+
+  return Object.values(monthlyTotals)
+    .sort((a, b) => a.sortKey.localeCompare(b.sortKey))
+    .slice(-3)
+    .map((item) => ({
+      month: item.month,
+      gastos: item.gastos,
+      receita: item.receita,
+    }));
+}
+
+function getMonthLabel(date) {
+  const labels = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+  return labels[date.getMonth()];
+}
 
 function getColorForCategory(category) {
   const colors = {
-    'Comida': '#F97316',
-    'Transporte': '#3B82F6',
-    'Saúde': '#10B981',
-    'Educação': '#8B5CF6',
-    'Lazer': '#EC4899',
-    'Contas': '#EF4444',
-    'Salário': '#10B981',
-    'Freelance': '#14B8A6',
+    Comida: '#F97316',
+    Transporte: '#3B82F6',
+    Saude: '#10B981',
+    Educacao: '#8B5CF6',
+    Alimentacao: '#F97316',
+    Lazer: '#EC4899',
+    Contas: '#EF4444',
+    Salario: '#10B981',
+    Freelance: '#14B8A6',
   };
+
   return colors[category] || '#6B7280';
 }
 
-function generateInsights(transactions, categoryData, trendData) {
+function generateInsights(categoryData, trendData) {
   const insights = [];
 
-  // Insight 1: Categoria com maior gasto
   if (categoryData.length > 0) {
     const top = categoryData[0];
-    const total = categoryData.reduce((sum, c) => sum + c.amount, 0);
+    const total = categoryData.reduce((sum, category) => sum + category.amount, 0);
     const percentage = Math.round((top.amount / total) * 100);
 
     insights.push({
-      icon: '📊',
-      text: `Você gastou ${percentage}% do total em ${top.category}`,
+      icon: 'Grafico',
+      text: `Voce gastou ${percentage}% do total em ${top.category}`,
       type: 'info',
       action: null,
     });
   }
 
-  // Insight 2: Tendência
   if (trendData.length >= 2) {
-    const current = trendData[trendData.length - 1].gastos;
-    const previous = trendData[trendData.length - 2].gastos;
-    const change = Math.round(((current - previous) / previous) * 100);
+    const current = trendData.at(-1).gastos;
+    const previous = trendData.at(-2).gastos;
+    const change = previous === 0 ? 0 : Math.round(((current - previous) / previous) * 100);
 
     if (change > 10) {
       insights.push({
-        icon: '📈',
-        text: `Seus gastos aumentaram ${change}% em relação ao mês anterior`,
+        icon: 'Alta',
+        text: `Seus gastos aumentaram ${change}% em relacao ao mes anterior`,
         type: 'warning',
         action: 'Revisar gastos',
       });
     } else if (change < -10) {
       insights.push({
-        icon: '✅',
-        text: `Excelente! Você gastou ${Math.abs(change)}% a menos que o mês anterior`,
+        icon: 'Ok',
+        text: `Excelente! Voce gastou ${Math.abs(change)}% a menos que o mes anterior`,
         type: 'success',
         action: null,
       });
     }
   }
 
-  // Insight 3: Padrão (fictício para demo)
   insights.push({
-    icon: '💡',
-    text: 'Dica: Você gasta mais nos fins de semana. Considere planejamento antecipado.',
+    icon: 'Dica',
+    text: 'Voce gasta mais nos fins de semana. Considere planejar essas despesas.',
     type: 'tip',
     action: null,
   });
