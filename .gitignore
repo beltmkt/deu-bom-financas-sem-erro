@@ -10,6 +10,8 @@ lerna-debug.log*
 node_modules
 dist
 dist-ssr
+test-results
+_bmad/config.user.toml
 *.local
 
 # Editor directories and files

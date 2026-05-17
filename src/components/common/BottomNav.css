@@ -5,18 +5,21 @@
   bottom: 0;
   left: 0;
   right: 0;
+  height: 64px;
   background: var(--color-surface, #1E293B);
   border-top: 1px solid var(--color-border, #334155);
-  z-index: 100;
+  z-index: 1000;
   box-shadow: 0 -2px 8px var(--color-shadow-sm, rgba(0, 0, 0, 0.1));
+  pointer-events: none;
 }
 
 .bottom-nav__container {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  height: 64px;
+  height: 100%;
   max-width: 100%;
+  pointer-events: auto;
 }
 
 .bottom-nav__tab {
@@ -36,6 +39,8 @@
   transition: all var(--transition-fast, 0.15s ease);
   position: relative;
   overflow: hidden;
+  pointer-events: auto;
+  z-index: 1;
 }
 
 .bottom-nav__tab:hover {
@@ -84,7 +89,7 @@
 .bottom-nav__spacer {
   height: 64px;
   width: 100%;
-  display: none; /* Hidden por padrão, ativado em mobile */
+  display: none;
 }
 
 /* ─────────────────────────────────────────────────────────────────────────── */
@@ -92,10 +97,6 @@
 /* ─────────────────────────────────────────────────────────────────────────── */
 
 @media (min-width: 1024px) {
-  .bottom-nav {
-    display: none; /* Esconde bottom nav em desktop */
-  }
-
   .bottom-nav__spacer {
     display: none;
   }
@@ -123,8 +124,7 @@
   }
 
   .bottom-nav__spacer {
-    display: block;
-    height: 60px;
+    display: none;
   }
 }
 
@@ -159,8 +159,7 @@
   }
 
   .bottom-nav__spacer {
-    display: block;
-    height: 64px;
+    display: none;
   }
 }
 

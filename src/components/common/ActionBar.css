@@ -2,7 +2,7 @@
 
 .action-bar {
   position: fixed;
-  bottom: 64px; /* Acima da BottomNav */
+  bottom: calc(64px + env(safe-area-inset-bottom, 0px)); /* Acima da BottomNav */
   left: 0;
   right: 0;
   background: var(--color-surface, #1E293B);
@@ -13,7 +13,7 @@
   justify-content: space-between;
   align-items: center;
   gap: 16px;
-  z-index: 99;
+  z-index: 110;
   animation: slideUp var(--transition-normal, 0.2s ease);
   box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
 }
@@ -109,7 +109,7 @@
 
 @media (max-width: 767px) {
   .action-bar {
-    bottom: 64px;
+    bottom: calc(64px + env(safe-area-inset-bottom, 0px));
     flex-wrap: wrap;
     padding: 10px 12px;
     gap: 10px;

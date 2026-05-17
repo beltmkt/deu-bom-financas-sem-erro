@@ -15,6 +15,7 @@ export function TransactionsPage({
 }) {
   const [filter, setFilter] = useState({ period: 'Ultimos 30d', categories: [], search: '' });
   const [selectedIds, setSelectedIds] = useState([]);
+  const [selectionResetKey, setSelectionResetKey] = useState(0);
   const [showCategoryModal, setShowCategoryModal] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(categories[0] || 'Comida');
 
@@ -42,6 +43,7 @@ export function TransactionsPage({
   const handleDeleteSelected = () => {
     onDeleteTransactions(selectedIds);
     setSelectedIds([]);
+    setSelectionResetKey((current) => current + 1);
   };
 
   const handleCategorizeSelected = () => {
@@ -52,6 +54,7 @@ export function TransactionsPage({
   const handleApplyCategory = () => {
     onCategorizeTransactions(selectedIds, selectedCategory);
     setSelectedIds([]);
+    setSelectionResetKey((current) => current + 1);
     setShowCategoryModal(false);
   };
 
@@ -63,8 +66,12 @@ export function TransactionsPage({
     <div className="transactions-page">
       <header className="transactions-page__header">
         <h1>Transacoes</h1>
-        <button className="transactions-page__search-btn" aria-label="Abrir busca">
-          BUSCA
+        <button
+          className="transactions-page__search-btn"
+          aria-label="Abrir analise"
+          onClick={() => onNavigate('analytics')}
+        >
+          DADOS
         </button>
       </header>
 
@@ -84,10 +91,16 @@ export function TransactionsPage({
               {selectedIds.length} selecionadas
             </span>
           )}
+          {selectedIds.length === 0 && (
+            <button className="transactions-page__cta-export" onClick={handleExport}>
+              Exportar
+            </button>
+          )}
         </div>
 
         {filteredTransactions.length > 0 ? (
           <TransactionList
+            key={selectionResetKey}
             transactions={filteredTransactions}
             limit={null}
             grouped={false}
@@ -112,12 +125,6 @@ export function TransactionsPage({
           ]}
         />
       )}
-
-      <section className="transactions-page__footer">
-        <button className="transactions-page__cta-export" onClick={handleExport}>
-          Exportar
-        </button>
-      </section>
 
       {showCategoryModal && (
         <div
